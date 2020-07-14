@@ -1,6 +1,7 @@
 package test;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author ：ZXY
@@ -47,6 +48,19 @@ public class Person {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
+
+
+
+    public static void main(String[] args) throws JsonProcessingException {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Person person = new Person(1, "tom", "123");
+            String jsonString = objectMapper.writeValueAsString(person);
+            System.out.println("JsonString: " + jsonString);
+    }
+
+
 
 }
 
