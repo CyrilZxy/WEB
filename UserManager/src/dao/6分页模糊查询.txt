@@ -1,0 +1,93 @@
+//6.分页查询所有用户信息
+    /*  查询当前条件下所有用户
+    *   start：开始查询的起始位置
+    *   rows：每次查询多少记录
+    *   map：name,address,email  可填也可为空    String[]只放了一个字符串
+    */
+    public static List<User> findByPage(int start,int rows,Map<String,String[]> map){
+
+        String sql="select * from usermessage where 1=1";
+        StringBuilder s=new StringBuilder(sql);                 //拼接
+        //select * from usermessage where 1=1 and address like ?  and name like ?  limit ?,?
+
+        Set<String> set = map.keySet();                 //name,adress,mail
+        List<Object> list =new ArrayList<>();
+
+        for(String key : set){
+            String value=map.get(key)[0];
+            if(value!=null && !"".equals(value)){                       //有值
+                s.append(" and ").append(key).append(" like ? ");       //拼接模糊查询
+                list.add("%"+value+"%");
+            }
+        }
+
+        s.append(" limit ?,? ");
+        list.add(start);
+        list.add(rows);
+
+        System.out.println("s: "+ s);
+        System.out.println("list: "+ list);
+
+
+
+        Connection connection=null;
+        PreparedStatement ps=null;
+        ResultSet rs=null;
+        List<User> userList = new ArrayList<>();
+        try{
+            connection=DBUtil.getConnection();
+            ps=connection.prepareStatement(s.toString());
+
+            //给sql语句赋值                      SQL语句不确定
+            setValues(ps,list.toArray());
+
+            rs=ps.executeQuery();
+            while(rs.next()){
+                User user=new User();
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setGender(rs.getString("gender"));
+                user.setAge(rs.getInt("age"));
+                user.setAddress(rs.getString("address"));
+                user.setQq(rs.getString("qq"));
+                user.setEmail(rs.getString("email"));
+                userList.add(user);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            DBUtil.close(connection,ps,rs);
+        }
+        return userList;
+    }
+
+
+    public static void setValues(PreparedStatement ps,Object... arrays) throws SQLException{
+        for (int i = 0; i < arrays.length; i++) {
+            ps.setObject(i+1,arrays[i]);
+        }
+    }
+
+
+    //测试模糊分页查询
+    public static void main6(String[] args) {
+
+        Map<String,String[]> map=new HashMap<>();
+
+        String[] names={""};
+        map.put("name",names);
+
+        String[] address={""};
+        map.put("address",address);
+
+        String[] emails={""};
+        map.put("emails",emails);
+
+        List<User> userList=findByPage(0,7,map);
+
+        for (User user:userList){
+            System.out.println(user);
+        }
+    }
