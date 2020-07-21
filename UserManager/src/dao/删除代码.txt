@@ -1,0 +1,103 @@
+	//测试登录
+    public static void main1(String[] args) {
+        User user=new User();
+        user.setUsername("zhangxinyue");
+        user.setPassword("123");
+        if(login(user)==null){
+            System.out.println("登录失败");
+        }else{
+            System.out.println("登录成功");
+        }
+    }
+	
+	
+	//测试添加用户
+    public static void main2(String[] args) {
+        User user=new User();
+        user.setName("琦玉");
+        user.setUsername("qiyu");
+        user.setPassword("123");
+        user.setGender("男");
+        user.setAge(20);
+        user.setAddress("日本");
+        user.setQq("000");
+        user.setEmail("000@qq.com");
+        int ret=add(user);
+        if(ret==0){
+            System.out.println("添加失败");
+        }else{
+            System.out.println("添加成功");
+        }
+    }
+	
+	
+	 //测试删除用户
+    public static void main3(String[] args) {
+        int ret=delect(2);
+        if (ret==0){
+            System.out.println("删除失败");
+        }else {
+            System.out.println("删除成功");
+        }
+    }
+	
+	
+	 //测试根据id查找用户
+    public static void main4(String[] args) {
+        User user=find(8);
+        System.out.println(user);
+    }
+	
+	
+	//测试更新用户信息
+    public static void main5(String[] args) {
+        User user=new User();
+        user.setId(7);
+        //user.setName("波奇");       不可更新
+        //user.setUsername("boqi");
+        //user.setPassword("123");
+        user.setGender("男");
+        user.setAge(12);
+        user.setAddress("日本");
+        user.setQq("666");
+        user.setEmail("666@qq.com");
+
+        int ret=updataUser(user);
+        if (ret==0){
+            System.out.println("更新失败");
+        }else{
+            System.out.println("更新成功");
+        }
+    }
+	
+	
+	//测试模糊分页查询
+    public static void main6(String[] args) {
+
+        Map<String,String[]> map=new HashMap<>();
+        String[] names={""};
+        map.put("name",names);
+        String[] address={""};
+        map.put("address",address);
+        String[] emails={""};
+        map.put("emails",emails);
+
+        List<User> userList=findByPage(0,7,map);
+        for (User user:userList){
+            System.out.println(user);
+        }
+    }
+	
+	
+	public static void main7(String[] args) {
+
+        Map<String,String[]> map=new HashMap<>();
+        String[] names={""};
+        map.put("name",names);
+        String[] address={"陕西"};
+        map.put("address",address);
+        String[] emails={""};
+        map.put("emails",emails);
+
+        System.out.println(findAllRecord(map));
+    }
