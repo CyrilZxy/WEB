@@ -7,19 +7,22 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-/**
- * @author ：ZXY
- * @date ：Created in 2020/7/13 20:10
- * @description：
- */
 
+/**
+ * Created with IntelliJ IDEA.
+ * Description: 连接数据库
+ * User: GAOBO
+ * Date: 2020-07-13
+ * Time: 20:06
+ */
 public class DBUtil {
-    private static String url = "jdbc:mysql://127.0.0.1:3306/usermanger?useSSL=false";
+    private static String url = "jdbc:mysql://127.0.0.1:3306/usermanager?useSSL=false";
     private static String password = "123456";
     private static String username = "root";
-    private static volatile DataSource DATASOURCE;
-    private static DataSource getDataSource(){
 
+    private static volatile DataSource DATASOURCE;
+
+    private static DataSource getDataSource(){
         // 双重校验锁
         if(DATASOURCE == null){
             synchronized (DBUtil.class){
@@ -33,10 +36,11 @@ public class DBUtil {
         }
         return DATASOURCE;
     }
+
     public static Connection getConnection(){
-        System.out.println("getConnection1");
+        //System.out.println("getConnection1");
         try {
-//从池子里获取连接
+            //从池子里获取连接
             Connection connection = getDataSource().getConnection();
             return connection;
         } catch (SQLException e) {
@@ -44,8 +48,8 @@ public class DBUtil {
             throw new RuntimeException("获取数据库连接失败");
         }
     }
-    public static void close(Connection connection, PreparedStatement statement, ResultSet
-            resultSet) {
+
+    public static void close(Connection connection, PreparedStatement statement, ResultSet resultSet) {
         if(resultSet!=null) {
             try {
                 resultSet.close();
@@ -68,5 +72,4 @@ public class DBUtil {
             }
         }
     }
-
 }
